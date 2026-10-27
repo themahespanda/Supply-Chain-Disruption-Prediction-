@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A10 Supply Chain Intelligence Center Dashboard</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    body {
+      background-color: #080d1a;
+      color: #f1f5f9;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0b1329;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #334155;
+    }
+  </style>
+</head>
+<body class="bg-[#080d1a] text-slate-100 antialiased min-h-screen flex flex-col">
+
+  <!-- TOP HEADER -->
+  <header class="bg-[#0b1329] border-b border-slate-800 px-6 py-3.5 sticky top-0 z-40 shadow-xl">
+    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+      <div>
+        <div class="flex items-center gap-2 flex-wrap">
+          <div class="w-7 h-7 rounded-lg bg-cyan-600 flex items-center justify-center font-black text-xs text-white shadow-md shadow-cyan-900/50">
+            A10
+          </div>
+          <h1 class="text-lg font-extrabold tracking-tight text-white">
+            SUPPLY CHAIN INTELLIGENCE CENTER
+          </h1>
+          <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-slate-800/90 text-cyan-300 border border-slate-700">
+            A10 | Automotive Manufacturing | Synthetic Demonstration Data
+          </span>
+        </div>
+        <p class="text-xs text-slate-400 mt-0.5 font-medium">
+          AI-Powered Disruption Prediction &amp; Operational Risk Management — Tata Motors Automotive Context
+        </p>
+      </div>
+
+      <div class="flex items-center gap-2.5">
+        <div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-xs">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span class="text-slate-400">Health Index:</span>
+          <span id="headerHealthScore" class="font-mono font-bold text-emerald-400">78.5 / 100</span>
+        </div>
+        <div class="px-2.5 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-xs text-slate-300 font-mono">
+          Ref Date: Oct 2026
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN BODY WITH SIDEBAR AND CONTENT -->
+  <div class="flex-1 flex overflow-hidden">
+    
+    <!-- FIXED SIDEBAR -->
+    <aside class="w-64 min-w-[16rem] bg-[#090f20] border-r border-slate-800 flex flex-col justify-between p-3 select-none">
+      <div class="space-y-1">
+        <div class="px-3 py-1.5 text-[11px] uppercase font-mono tracking-wider text-slate-500 font-bold">
+          Navigation Views
+        </div>
+        
+        <button onclick="switchView('overview')" id="nav-overview" class="nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold bg-cyan-950/70 text-cyan-300 border border-cyan-500/40 transition">
+          <span>1. Executive Overview</span>
+          <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+        </button>
+
+        <button onclick="switchView('suppliers')" id="nav-suppliers" class="nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800/60 border border-transparent transition">
+          <span>2. Supplier Intelligence</span>
+        </button>
+
+        <button onclick="switchView('inventory')" id="nav-inventory" class="nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800/60 border border-transparent transition">
+          <span>3. Inventory Monitoring</span>
+          <span class="px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-mono text-[10px]">18</span>
+        </button>
+
+        <button onclick="switchView('transportation')" id="nav-transportation" class="nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800/60 border border-transparent transition">
+          <span>4. Transportation Risk</span>
+        </button>
+
+        <button onclick="switchView('predictions')" id="nav-predictions" class="nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800/60 border border-transparent transition">
+          <span>5. AI Predictions</span>
+          <span class="px-1.5 py-0.2 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 font-mono text-[9px]">ML</span>
+        </button>
+
+        <button onclick="switchView('production')" id="nav-production" class="nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800/60 border border-transparent transition">
+          <span>6. Production Impact</span>
+          <span class="px-1.5 py-0.2 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30 font-mono text-[10px]">22</span>
+        </button>
+
+        <button onclick="switchView('mitigations')" id="nav-mitigations" class="nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800/60 border border-transparent transition">
+          <span>7. Mitigation Center</span>
+        </button>
+
+        <button onclick="switchView('simulator')" id="nav-simulator" class="nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800/60 border border-transparent transition">
+          <span>8. Scenario Simulator</span>
+        </button>
+
+        <button onclick="switchView('data')" id="nav-data" class="nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800/60 border border-transparent transition">
+          <span>9. Data Management</span>
+        </button>
+      </div>
+
+      <div class="p-2.5 rounded-lg bg-slate-950/80 border border-slate-800 text-[11px] text-slate-400 space-y-1">
+        <div class="flex items-center justify-between text-slate-300 font-medium">
+          <span>Engine Model</span>
+          <span class="text-cyan-400 font-mono">RandomForest</span>
+        </div>
+        <div class="text-[10px] text-slate-500">
+          Scikit-Learn Classification
+        </div>
+      </div>
+    </aside>
+
+    <!-- CONTENT WRAPPER -->
+    <main class="flex-1 overflow-y-auto p-6 bg-[#080d1a]">
+
+      <!-- VIEW 1: EXECUTIVE OVERVIEW -->
+      <section id="view-overview" class="space-y-6">
+        <!-- 6 Clickable KPI Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3.5">
+          <div onclick="switchView('suppliers')" class="bg-[#0d162d] hover:bg-[#121f3f] border border-slate-800 hover:border-cyan-500/50 rounded-xl p-4 cursor-pointer transition shadow-lg">
+            <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1">Active Suppliers</div>
+            <div class="text-2xl font-bold font-mono text-white">40</div>
+            <div class="text-[10px] text-emerald-400 font-medium mt-1">+2.4% vs 30d baseline</div>
+          </div>
+
+          <div onclick="switchView('suppliers')" class="bg-[#0d162d] hover:bg-[#121f3f] border border-slate-800 hover:border-rose-500/50 rounded-xl p-4 cursor-pointer transition shadow-lg">
+            <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1">High-Risk Vendors</div>
+            <div class="text-2xl font-bold font-mono text-rose-400">12</div>
+            <div class="text-[10px] text-slate-400 font-medium mt-1">Score &gt; 65 / 100</div>
+          </div>
+
+          <div onclick="switchView('inventory')" class="bg-[#0d162d] hover:bg-[#121f3f] border border-slate-800 hover:border-amber-500/50 rounded-xl p-4 cursor-pointer transition shadow-lg">
+            <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1">Below Safety Stock</div>
+            <div class="text-2xl font-bold font-mono text-amber-400">18</div>
+            <div class="text-[10px] text-rose-400 font-medium mt-1">7 Critical Shortages</div>
+          </div>
+
+          <div onclick="switchView('transportation')" class="bg-[#0d162d] hover:bg-[#121f3f] border border-slate-800 hover:border-blue-500/50 rounded-xl p-4 cursor-pointer transition shadow-lg">
+            <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1">Delayed Shipments</div>
+            <div class="text-2xl font-bold font-mono text-blue-300">14</div>
+            <div class="text-[10px] text-emerald-400 font-medium mt-1">-5.6% vs 30d baseline</div>
+          </div>
+
+          <div onclick="switchView('production')" class="bg-[#0d162d] hover:bg-[#121f3f] border border-slate-800 hover:border-rose-500/50 rounded-xl p-4 cursor-pointer transition shadow-lg">
+            <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1">Orders at Risk</div>
+            <div class="text-2xl font-bold font-mono text-rose-400">22</div>
+            <div class="text-[10px] text-slate-400 font-medium mt-1">4,250 units exposed</div>
+          </div>
+
+          <div onclick="switchView('predictions')" class="bg-gradient-to-br from-[#0d1838] to-[#122350] border border-cyan-500/40 rounded-xl p-4 cursor-pointer transition shadow-lg">
+            <div class="text-[11px] font-semibold text-cyan-300 uppercase tracking-wider mb-1">AI 7-Day Forecast</div>
+            <div class="text-2xl font-bold font-mono text-cyan-200">11 Events</div>
+            <div class="text-[10px] text-cyan-300/80 font-medium mt-1">ML Probability &gt; 65%</div>
+          </div>
+        </div>
+
+        <!-- Vitality Cards Row -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div class="bg-[#0d162d] border border-slate-800 rounded-xl p-5 shadow-lg">
+            <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Supply Chain Health</div>
+            <div class="text-3xl font-extrabold font-mono text-white mb-2">78.5 <span class="text-xs font-normal text-slate-400">/ 100</span></div>
+            <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden mb-2">
+              <div class="bg-cyan-500 h-full rounded-full" style="width: 78.5%"></div>
+            </div>
+            <p class="text-[11px] text-slate-400 leading-snug">Calculated from supplier risk ratings, stockout breaches, and delayed shipments.</p>
+          </div>
+
+          <div class="bg-[#0d162d] border border-slate-800 rounded-xl p-5 shadow-lg">
+            <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Overall Disruption Risk</div>
+            <div class="text-3xl font-extrabold font-mono text-amber-400 mb-2">Moderate</div>
+            <p class="text-[11px] text-slate-400 leading-snug">Triggered by semiconductor buffer stockouts and western corridor highway delays.</p>
+          </div>
+
+          <div class="bg-[#0d162d] border border-slate-800 rounded-xl p-5 shadow-lg">
+            <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Delay Exposure</div>
+            <div class="text-3xl font-extrabold font-mono text-blue-300 mb-2">~5.2 Days</div>
+            <p class="text-[11px] text-slate-400 leading-snug">Average assembly schedule delay across at-risk commercial and passenger builds.</p>
+          </div>
+
+          <div class="bg-[#0d162d] border border-slate-800 rounded-xl p-5 shadow-lg">
+            <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Critical Availability</div>
+            <div class="text-3xl font-extrabold font-mono text-emerald-400 mb-2">82.0%</div>
+            <p class="text-[11px] text-slate-400 leading-snug">82 out of 100 monitored automotive components maintain full safety buffer compliance.</p>
+          </div>
+        </div>
+
+        <!-- Recent Alerts Stream -->
+        <div class="bg-[#0d162d] border border-slate-800 rounded-xl p-5 shadow-lg">
+          <div class="flex items-center justify-between mb-3 border-b border-slate-800 pb-2">
+            <h3 class="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+              Live Operational Events &amp; Disruption Warnings
+            </h3>
+            <span class="text-[11px] font-mono text-slate-400">Tata Motors Plants</span>
+          </div>
+          <div class="space-y-2 text-xs">
+            <div class="p-3 bg-slate-900/80 border border-slate-800 rounded-lg flex items-start justify-between gap-3">
+              <div>
+                <span class="px-1.5 py-0.2 rounded bg-rose-500/20 text-rose-400 border border-rose-500/40 text-[9px] font-mono font-bold mr-2 uppercase">Critical Shortage</span>
+                <span class="font-bold text-white">32-bit Automotive Microcontroller ECU</span>
+                <p class="text-slate-400 mt-0.5">Stock at Pune PV Plant has dropped to 3.8 days of consumption. Projected stockout on 2026-11-01.</p>
+              </div>
+              <span class="text-[11px] font-mono text-slate-500 whitespace-nowrap">12m ago</span>
+            </div>
+
+            <div class="p-3 bg-slate-900/80 border border-slate-800 rounded-lg flex items-start justify-between gap-3">
+              <div>
+                <span class="px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-400 border border-amber-500/40 text-[9px] font-mono font-bold mr-2 uppercase">Supplier Lag</span>
+                <span class="font-bold text-white">Continental Braking India (SUP-015)</span>
+                <p class="text-slate-400 mt-0.5">Vendor delay rate at 28.5%. Shipments for ABS Modulator Units running +3.5 days late.</p>
+              </div>
+              <span class="text-[11px] font-mono text-slate-500 whitespace-nowrap">42m ago</span>
+            </div>
+
+            <div class="p-3 bg-slate-900/80 border border-slate-800 rounded-lg flex items-start justify-between gap-3">
+              <div>
+                <span class="px-1.5 py-0.2 rounded bg-blue-500/20 text-blue-400 border border-blue-500/40 text-[9px] font-mono font-bold mr-2 uppercase">Logistics Weather</span>
+                <span class="font-bold text-white">Freight Shipment SHP-2018</span>
+                <p class="text-slate-400 mt-0.5">Western coastal rain storm delaying express road shipment from Chennai to Pune Hub.</p>
+              </div>
+              <span class="text-[11px] font-mono text-slate-500 whitespace-nowrap">1h ago</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 2: SUPPLIER INTELLIGENCE -->
+      <section id="view-suppliers" class="space-y-6 hidden">
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="text-base font-bold text-white">Supplier Risk Intelligence &amp; Performance Ranking</h2>
+            <p class="text-xs text-slate-400">Formula: 0.35*(Delay) + 0.25*(Defects) + 0.15*(LeadTime) + 0.15*(FinancialRisk) + 0.10*(100-Perf)</p>
+          </div>
+          <span class="px-2.5 py-1 rounded bg-slate-900 border border-slate-800 text-xs font-mono text-cyan-400">40 Active Vendors</span>
+        </div>
+
+        <div class="bg-[#0d162d] border border-slate-800 rounded-xl overflow-hidden shadow-lg">
+          <table class="w-full text-left text-xs text-slate-300">
+            <thead class="bg-[#090f20] text-slate-400 font-semibold uppercase text-[10px] border-b border-slate-800">
+              <tr>
+                <th class="py-3 px-4">Supplier Name &amp; ID</th>
+                <th class="py-3 px-4">Category</th>
+                <th class="py-3 px-4">Location</th>
+                <th class="py-3 px-4">Risk Score</th>
+                <th class="py-3 px-4">Delay Rate</th>
+                <th class="py-3 px-4">Defect Rate</th>
+                <th class="py-3 px-4">Lead Time</th>
+                <th class="py-3 px-4">Financial Risk</th>
+                <th class="py-3 px-4 text-right">Qualified Alternative</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-800">
+              <tr class="hover:bg-slate-800/40">
+                <td class="py-3 px-4"><span class="font-bold text-white block">Craftsman Automation</span><span class="text-[10px] font-mono text-cyan-400">SUP-028</span></td>
+                <td class="py-3 px-4">Engine &amp; Powertrain</td>
+                <td class="py-3 px-4">Coimbatore</td>
+                <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-rose-500/20 text-rose-400 border border-rose-500/40 font-mono font-bold">87.6 (High)</span></td>
+                <td class="py-3 px-4 font-mono text-rose-400">38.5%</td>
+                <td class="py-3 px-4 font-mono">7.2%</td>
+                <td class="py-3 px-4 font-mono">38 days</td>
+                <td class="py-3 px-4 font-mono text-rose-400">89.0/100</td>
+                <td class="py-3 px-4 text-right text-emerald-300 font-mono text-[11px]">Sundram Fasteners</td>
+              </tr>
+              <tr class="hover:bg-slate-800/40">
+                <td class="py-3 px-4"><span class="font-bold text-white block">Continental Braking India</span><span class="text-[10px] font-mono text-cyan-400">SUP-015</span></td>
+                <td class="py-3 px-4">Braking Systems</td>
+                <td class="py-3 px-4">Manesar</td>
+                <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-rose-500/20 text-rose-400 border border-rose-500/40 font-mono font-bold">78.4 (High)</span></td>
+                <td class="py-3 px-4 font-mono text-rose-400">31.2%</td>
+                <td class="py-3 px-4 font-mono">5.8%</td>
+                <td class="py-3 px-4 font-mono">34 days</td>
+                <td class="py-3 px-4 font-mono text-rose-400">76.5/100</td>
+                <td class="py-3 px-4 text-right text-emerald-300 font-mono text-[11px]">Endurance Technologies</td>
+              </tr>
+              <tr class="hover:bg-slate-800/40">
+                <td class="py-3 px-4"><span class="font-bold text-white block">Apex Precision Electronics</span><span class="text-[10px] font-mono text-cyan-400">SUP-001</span></td>
+                <td class="py-3 px-4">Semiconductors</td>
+                <td class="py-3 px-4">Bengaluru</td>
+                <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 font-mono font-bold">24.5 (Low)</span></td>
+                <td class="py-3 px-4 font-mono text-emerald-400">4.5%</td>
+                <td class="py-3 px-4 font-mono">0.8%</td>
+                <td class="py-3 px-4 font-mono">12 days</td>
+                <td class="py-3 px-4 font-mono">22.0/100</td>
+                <td class="py-3 px-4 text-right text-slate-400 font-mono text-[11px]">Preferred Vendor</td>
+              </tr>
+              <tr class="hover:bg-slate-800/40">
+                <td class="py-3 px-4"><span class="font-bold text-white block">Tata AutoComp Systems Ltd</span><span class="text-[10px] font-mono text-cyan-400">SUP-005</span></td>
+                <td class="py-3 px-4">Batteries &amp; Power</td>
+                <td class="py-3 px-4">Pune</td>
+                <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 font-mono font-bold">18.2 (Low)</span></td>
+                <td class="py-3 px-4 font-mono text-emerald-400">3.2%</td>
+                <td class="py-3 px-4 font-mono">0.6%</td>
+                <td class="py-3 px-4 font-mono">8 days</td>
+                <td class="py-3 px-4 font-mono">15.0/100</td>
+                <td class="py-3 px-4 text-right text-slate-400 font-mono text-[11px]">Preferred Vendor</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- VIEW 3: INVENTORY MONITORING -->
+      <section id="view-inventory" class="space-y-6 hidden">
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="text-base font-bold text-white">Inventory Risk Monitoring &amp; Stockout Projections</h2>
+            <p class="text-xs text-slate-400">Days of Inventory Remaining = Current Stock / Daily Consumption</p>
+          </div>
+          <span class="px-2.5 py-1 rounded bg-slate-900 border border-slate-800 text-xs font-mono text-amber-400">18 Parts Below Safety</span>
+        </div>
+
+        <div class="bg-[#0d162d] border border-slate-800 rounded-xl overflow-hidden shadow-lg">
+          <table class="w-full text-left text-xs text-slate-300">
+            <thead class="bg-[#090f20] text-slate-400 font-semibold uppercase text-[10px] border-b border-slate-800">
+              <tr>
+                <th class="py-3 px-4">Component &amp; ID</th>
+                <th class="py-3 px-4">Plant</th>
+                <th class="py-3 px-4">Stock vs Safety</th>
+                <th class="py-3 px-4">Days Coverage</th>
+                <th class="py-3 px-4">Est. Stockout</th>
+                <th class="py-3 px-4">Lead Time</th>
+                <th class="py-3 px-4">Reorder Recommendation</th>
+                <th class="py-3 px-4 text-right">Orders Impacted</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-800">
+              <tr class="hover:bg-slate-800/40">
+                <td class="py-3 px-4"><span class="font-bold text-white block">32-bit Automotive Microcontroller ECU</span><span class="text-[10px] font-mono text-cyan-400">CMP-001</span></td>
+                <td class="py-3 px-4">Pune PV Plant</td>
+                <td class="py-3 px-4 font-mono text-rose-400">320 / 850 units</td>
+                <td class="py-3 px-4 font-mono font-bold text-rose-400">3.8 days</td>
+                <td class="py-3 px-4 font-mono">2026-11-01</td>
+                <td class="py-3 px-4 font-mono">14 days</td>
+                <td class="py-3 px-4 text-rose-300 font-semibold">+1,200 units (CRITICAL EXPEDITE)</td>
+                <td class="py-3 px-4 text-right font-mono font-bold text-cyan-400">6 POs</td>
+              </tr>
+              <tr class="hover:bg-slate-800/40">
+                <td class="py-3 px-4"><span class="font-bold text-white block">ABS Hydraulic Modulator</span><span class="text-[10px] font-mono text-cyan-400">CMP-006</span></td>
+                <td class="py-3 px-4">Sanand Plant</td>
+                <td class="py-3 px-4 font-mono text-rose-400">410 / 720 units</td>
+                <td class="py-3 px-4 font-mono font-bold text-rose-400">4.5 days</td>
+                <td class="py-3 px-4 font-mono">2026-11-02</td>
+                <td class="py-3 px-4 font-mono">18 days</td>
+                <td class="py-3 px-4 text-amber-300 font-semibold">+850 units (HIGH PRIORITY)</td>
+                <td class="py-3 px-4 text-right font-mono font-bold text-cyan-400">4 POs</td>
+              </tr>
+              <tr class="hover:bg-slate-800/40">
+                <td class="py-3 px-4"><span class="font-bold text-white block">40kWh LFP EV Battery Pack Module</span><span class="text-[10px] font-mono text-cyan-400">CMP-003</span></td>
+                <td class="py-3 px-4">Pune PV Plant</td>
+                <td class="py-3 px-4 font-mono text-emerald-400">1,450 / 900 units</td>
+                <td class="py-3 px-4 font-mono font-bold text-emerald-400">16.2 days</td>
+                <td class="py-3 px-4 font-mono">2026-11-13</td>
+                <td class="py-3 px-4 font-mono">10 days</td>
+                <td class="py-3 px-4 text-slate-400">Normal Schedule</td>
+                <td class="py-3 px-4 text-right font-mono font-bold text-cyan-400">5 POs</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- VIEW 4: TRANSPORTATION RISK -->
+      <section id="view-transportation" class="space-y-6 hidden">
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="text-base font-bold text-white">Transportation Monitoring &amp; Freight Corridor Analysis</h2>
+            <p class="text-xs text-slate-400">Visual flow representation of vendor-to-plant logistics hubs</p>
+          </div>
+          <span class="px-2.5 py-1 rounded bg-slate-900 border border-slate-800 text-xs font-mono text-blue-400">14 Delayed Shipments</span>
+        </div>
+
+        <div class="p-4 bg-[#0d162d] border border-slate-800 rounded-xl space-y-3">
+          <div class="text-xs font-bold text-white uppercase tracking-wider mb-2">Primary Supply Chain Transit Corridors</div>
+          
+          <div class="p-3 bg-slate-900 border border-slate-800 rounded-lg flex items-center justify-between text-xs">
+            <div>
+              <span class="font-bold text-white">Southern Electronics Hub (Bengaluru / Hyderabad)</span>
+              <p class="text-slate-400 text-[11px]">Semiconductors, ECUs &amp; Radar Modules</p>
+            </div>
+            <span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-mono text-[10px]">NH48 Traffic Bottleneck (+2.5d)</span>
+            <div class="text-right">
+              <span class="font-bold text-emerald-400">Pune PV Plant</span>
+              <p class="text-slate-400 text-[11px]">Nexon EV Assembly</p>
+            </div>
+          </div>
+
+          <div class="p-3 bg-slate-900 border border-slate-800 rounded-lg flex items-center justify-between text-xs">
+            <div>
+              <span class="font-bold text-white">Northern Industrial Belt (Gurgaon / Manesar)</span>
+              <p class="text-slate-400 text-[11px]">Braking Hydraulics &amp; EPAS Steering Racks</p>
+            </div>
+            <span class="px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 font-mono text-[10px]">Western Rail Express (On Schedule)</span>
+            <div class="text-right">
+              <span class="font-bold text-emerald-400">Sanand Plant</span>
+              <p class="text-slate-400 text-[11px]">Tiago EV Line</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 5: AI DISRUPTION PREDICTIONS -->
+      <section id="view-predictions" class="space-y-6 hidden">
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="text-base font-bold text-white">AI Disruption Prediction Engine (Scikit-Learn ML Pipeline)</h2>
+            <p class="text-xs text-slate-400">Trained on empirical disruption history with balanced class weights</p>
+          </div>
+          <span class="px-2.5 py-1 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-xs font-mono">Model: Production Ready</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-xs">
+          <div class="p-3.5 bg-[#0d162d] border border-slate-800 rounded-xl">
+            <span class="text-slate-400 text-[11px] block">Precision</span>
+            <span class="text-2xl font-bold font-mono text-cyan-300">63.0%</span>
+          </div>
+          <div class="p-3.5 bg-[#0d162d] border border-slate-800 rounded-xl">
+            <span class="text-slate-400 text-[11px] block">Recall</span>
+            <span class="text-2xl font-bold font-mono text-cyan-300">73.9%</span>
+          </div>
+          <div class="p-3.5 bg-[#0d162d] border border-slate-800 rounded-xl">
+            <span class="text-slate-400 text-[11px] block">F1-Score</span>
+            <span class="text-2xl font-bold font-mono text-emerald-400">68.0%</span>
+          </div>
+          <div class="p-3.5 bg-[#0d162d] border border-slate-800 rounded-xl">
+            <span class="text-slate-400 text-[11px] block">ROC-AUC</span>
+            <span class="text-2xl font-bold font-mono text-blue-400">82.0%</span>
+          </div>
+        </div>
+
+        <div class="p-5 bg-[#0d162d] border border-slate-800 rounded-xl space-y-3">
+          <div class="text-xs font-bold text-white uppercase tracking-wider">Top ML Feature Importances</div>
+          <div class="space-y-2 text-xs">
+            <div>
+              <div class="flex justify-between font-mono mb-1">
+                <span>Inventory Days Coverage</span>
+                <span class="text-cyan-400 font-bold">23.8%</span>
+              </div>
+              <div class="w-full bg-slate-900 h-2 rounded-full overflow-hidden">
+                <div class="bg-cyan-500 h-full rounded-full" style="width: 23.8%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between font-mono mb-1">
+                <span>Component Unit Cost</span>
+                <span class="text-cyan-400 font-bold">16.2%</span>
+              </div>
+              <div class="w-full bg-slate-900 h-2 rounded-full overflow-hidden">
+                <div class="bg-cyan-500 h-full rounded-full" style="width: 16.2%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between font-mono mb-1">
+                <span>Supplier Historical Delay Rate</span>
+                <span class="text-cyan-400 font-bold">12.3%</span>
+              </div>
+              <div class="w-full bg-slate-900 h-2 rounded-full overflow-hidden">
+                <div class="bg-cyan-500 h-full rounded-full" style="width: 12.3%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 6: PRODUCTION IMPACT -->
+      <section id="view-production" class="space-y-6 hidden">
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="text-base font-bold text-white">Production Schedule &amp; Vehicle Assembly Impact</h2>
+            <p class="text-xs text-slate-400">Traces component stockouts directly to scheduled vehicle build programs</p>
+          </div>
+          <span class="px-2.5 py-1 rounded bg-slate-900 border border-slate-800 text-xs font-mono text-rose-400">4,250 Units Exposed</span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 text-xs">
+          <div class="p-3 bg-[#0d162d] border border-slate-800 rounded-lg">
+            <span class="font-bold text-white block">Nexon EV</span>
+            <span class="text-rose-400 font-mono font-bold text-sm">1,250 units at risk</span>
+            <p class="text-slate-400 text-[10px] mt-1">Shortage: Microcontroller ECU</p>
+          </div>
+          <div class="p-3 bg-[#0d162d] border border-slate-800 rounded-lg">
+            <span class="font-bold text-white block">Harrier Dark Edition</span>
+            <span class="text-amber-400 font-mono font-bold text-sm">850 units at risk</span>
+            <p class="text-slate-400 text-[10px] mt-1">Shortage: EPAS Steering Rack</p>
+          </div>
+          <div class="p-3 bg-[#0d162d] border border-slate-800 rounded-lg">
+            <span class="font-bold text-white block">Prima Heavy Truck</span>
+            <span class="text-rose-400 font-mono font-bold text-sm">620 units at risk</span>
+            <p class="text-slate-400 text-[10px] mt-1">Shortage: Brake Drum Castings</p>
+          </div>
+          <div class="p-3 bg-[#0d162d] border border-slate-800 rounded-lg">
+            <span class="font-bold text-white block">Tiago EV</span>
+            <span class="text-amber-400 font-mono font-bold text-sm">900 units at risk</span>
+            <p class="text-slate-400 text-[10px] mt-1">Shortage: Modular Wiring</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 7: MITIGATION CENTER -->
+      <section id="view-mitigations" class="space-y-6 hidden">
+        <div>
+          <h2 class="text-base font-bold text-white">AI Operational Mitigation Playbooks</h2>
+          <p class="text-xs text-slate-400">Prescriptive action steps with supporting operational telemetry and qualified dual-sources</p>
+        </div>
+
+        <div class="space-y-4">
+          <div class="p-5 bg-[#0d162d] border border-slate-800 rounded-xl space-y-3 shadow-lg">
+            <div class="flex items-center justify-between">
+              <span class="px-2 py-0.5 rounded bg-rose-500/20 text-rose-400 border border-rose-500/40 text-[10px] font-mono font-bold uppercase">Scenario A — Critical</span>
+              <span class="text-xs font-mono text-cyan-400 font-bold">REC-SEMI-001</span>
+            </div>
+            <h3 class="text-sm font-bold text-white">Projected Stockout for 32-bit Automotive Microcontroller ECU</h3>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              Stock at Pune PV Plant is currently 320 units against safety stock of 850 units. Coverage remaining: 3.8 days against replenishment cycle of 14 days.
+            </p>
+            <div class="p-3 bg-slate-900 border border-slate-800 rounded-lg text-xs space-y-1">
+              <span class="text-cyan-400 font-bold uppercase tracking-wider text-[10px] block">Prescriptive Step-by-Step Response:</span>
+              <p class="text-slate-200">1. Issue emergency air courier order for +1,200 units.<br/>2. Engage pre-qualified dual source: Deccan Semiconductor Fab.<br/>3. Reallocate existing parts strictly to high-margin Nexon EV production.</p>
+            </div>
+            <div class="flex items-center justify-between text-xs pt-2 border-t border-slate-800 text-slate-400">
+              <span>Expected Benefit: Protects 450 vehicle completions</span>
+              <span class="text-emerald-400 font-mono font-semibold">Dual-Source: Deccan Semiconductor Fab</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 8: SCENARIO SIMULATOR -->
+      <section id="view-simulator" class="space-y-6 hidden">
+        <div>
+          <h2 class="text-base font-bold text-white">Interactive Supply Chain Shock &amp; What-If Simulator</h2>
+          <p class="text-xs text-slate-400">Adjust operational parameters below to trigger instant before-and-after mathematical recalculation</p>
+        </div>
+
+        <div class="p-5 bg-[#0d162d] border border-slate-800 rounded-xl space-y-5 shadow-lg">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs">
+            <div>
+              <div class="flex justify-between font-medium mb-1">
+                <span class="text-slate-300">Supplier Delay Delta:</span>
+                <span id="lblSimDelay" class="font-mono text-cyan-400 font-bold">+15%</span>
+              </div>
+              <input type="range" min="-30" max="50" value="15" id="sliderDelay" oninput="updateSim()" class="w-full accent-cyan-400 cursor-pointer" />
+            </div>
+
+            <div>
+              <div class="flex justify-between font-medium mb-1">
+                <span class="text-slate-300">Transit Corridor Delay:</span>
+                <span id="lblSimTransit" class="font-mono text-cyan-400 font-bold">+3 Days</span>
+              </div>
+              <input type="range" min="0" max="15" value="3" id="sliderTransit" oninput="updateSim()" class="w-full accent-cyan-400 cursor-pointer" />
+            </div>
+
+            <div>
+              <div class="flex justify-between font-medium mb-1">
+                <span class="text-slate-300">Consumption Rate:</span>
+                <span id="lblSimConsumption" class="font-mono text-cyan-400 font-bold">1.2x</span>
+              </div>
+              <input type="range" min="5" max="25" value="12" id="sliderConsumption" oninput="updateSim()" class="w-full accent-cyan-400 cursor-pointer" />
+            </div>
+          </div>
+
+          <!-- Live Recalculated Before vs After Cards -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t border-slate-800">
+            <div class="p-4 bg-slate-900 border border-slate-800 rounded-lg text-xs">
+              <span class="text-slate-400 uppercase text-[10px] font-bold block mb-1">Simulated Health Index</span>
+              <div class="text-2xl font-bold font-mono text-rose-400" id="simHealthScore">61.2 / 100</div>
+              <span class="text-rose-400 text-[10px] font-mono font-semibold" id="simHealthDelta">-17.3 pts degradation</span>
+            </div>
+
+            <div class="p-4 bg-slate-900 border border-slate-800 rounded-lg text-xs">
+              <span class="text-slate-400 uppercase text-[10px] font-bold block mb-1">Components Below Safety</span>
+              <div class="text-2xl font-bold font-mono text-amber-400" id="simBelowSafety">26 parts</div>
+              <span class="text-amber-400 text-[10px] font-mono font-semibold" id="simBelowDelta">+8 additional stockouts</span>
+            </div>
+
+            <div class="p-4 bg-slate-900 border border-slate-800 rounded-lg text-xs">
+              <span class="text-slate-400 uppercase text-[10px] font-bold block mb-1">Orders at Risk</span>
+              <div class="text-2xl font-bold font-mono text-rose-400" id="simOrders">31 orders</div>
+              <span class="text-rose-400 text-[10px] font-mono font-semibold" id="simOrdersDelta">5,980 vehicle units exposed</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 9: DATA MANAGEMENT -->
+      <section id="view-data" class="space-y-6 hidden">
+        <div>
+          <h2 class="text-base font-bold text-white">Excel Data Management &amp; Synthetic Generator</h2>
+          <p class="text-xs text-slate-400">Manage A10_Supply_Chain_Synthetic_Data.xlsx and export risk assessments</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+          <div class="p-4 bg-[#0d162d] border border-slate-800 rounded-xl space-y-2">
+            <span class="font-bold text-white block">Synthetic Workbook</span>
+            <p class="text-slate-400 text-[11px]">Download the complete 5-worksheet workbook with 40 suppliers, 100 parts, 150 orders, and 200 disruptions.</p>
+            <div class="text-cyan-400 font-mono text-[11px] pt-1">A10_Supply_Chain_Synthetic_Data.xlsx</div>
+          </div>
+
+          <div class="p-4 bg-[#0d162d] border border-slate-800 rounded-xl space-y-2">
+            <span class="font-bold text-white block">Schema Validation Engine</span>
+            <p class="text-slate-400 text-[11px]">Strict verification checks mandatory sheet names, required columns, and prevents duplicate primary keys.</p>
+            <span class="text-emerald-400 font-mono text-[11px]">Status: Active &amp; Validated</span>
+          </div>
+
+          <div class="p-4 bg-[#0d162d] border border-slate-800 rounded-xl space-y-2">
+            <span class="font-bold text-white block">Executive Risk Export</span>
+            <p class="text-slate-400 text-[11px]">Generates an executive-formatted workbook with styled headings and risk tables.</p>
+            <span class="text-blue-300 font-mono text-[11px]">OpenPyXL Formatted .xlsx</span>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    function switchView(viewName) {
+      const views = ['overview', 'suppliers', 'inventory', 'transportation', 'predictions', 'production', 'mitigations', 'simulator', 'data'];
+      views.forEach(v => {
+        const el = document.getElementById('view-' + v);
+        const btn = document.getElementById('nav-' + v);
+        if (v === viewName) {
+          el.classList.remove('hidden');
+          btn.className = 'nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold bg-cyan-950/70 text-cyan-300 border border-cyan-500/40 transition';
+        } else {
+          el.classList.add('hidden');
+          btn.className = 'nav-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800/60 border border-transparent transition';
+        }
+      });
+    }
+
+    function updateSim() {
+      const d = parseInt(document.getElementById('sliderDelay').value);
+      const t = parseInt(document.getElementById('sliderTransit').value);
+      const c = parseFloat(document.getElementById('sliderConsumption').value) / 10;
+
+      document.getElementById('lblSimDelay').innerText = (d >= 0 ? '+' : '') + d + '%';
+      document.getElementById('lblSimTransit').innerText = '+' + t + ' Days';
+      document.getElementById('lblSimConsumption').innerText = c.toFixed(1) + 'x';
+
+      const baseHealth = 78.5;
+      const penalty = (d * 0.4) + (t * 2.2) + ((c - 1.0) * 18.0);
+      const newHealth = Math.max(25, Math.min(98, Math.round((baseHealth - penalty) * 10) / 10));
+      const delta = Math.round((newHealth - baseHealth) * 10) / 10;
+
+      document.getElementById('simHealthScore').innerText = newHealth.toFixed(1) + ' / 100';
+      document.getElementById('simHealthDelta').innerText = (delta < 0 ? delta : '+' + delta) + ' pts degradation';
+
+      const addShortage = Math.max(0, Math.round((t * 1.5) + ((c - 1.0) * 14)));
+      document.getElementById('simBelowSafety').innerText = (18 + addShortage) + ' parts';
+      document.getElementById('simBelowDelta').innerText = '+' + addShortage + ' additional stockouts';
+
+      const addOrders = Math.max(0, Math.round((d * 0.2) + (t * 1.8)));
+      document.getElementById('simOrders').innerText = (22 + addOrders) + ' orders';
+      document.getElementById('simOrdersDelta').innerText = ((22 + addOrders) * 190).toLocaleString() + ' vehicle units exposed';
+    }
+  </script>
+</body>
+</html>
